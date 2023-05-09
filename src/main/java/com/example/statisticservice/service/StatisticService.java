@@ -3,6 +3,7 @@ package com.example.statisticservice.service;
 import com.example.statisticservice.RedisExample;
 import com.example.statisticservice.entity.Statistic;
 import com.example.statisticservice.repository.StatisticRepo;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,7 +29,7 @@ public class StatisticService {
 
 
     @KafkaListener(id = "statisticGroup", topics = "statistic")
-    public void listen(Statistic statistic) {
+    public void listen(Statistic statistic) throws JsonProcessingException {
         logger.info("Received: "+ statistic.getMessage());
         statisticRepo.save(statistic);
 
@@ -38,5 +39,7 @@ public class StatisticService {
             redisExample.setKeyValueRedis(statistic1.get());
         }
 
+        List<Statistic> statisticsList = statisticRepo.findAll();
+        redisExample.listExample(statisticsList);
     }
 }
