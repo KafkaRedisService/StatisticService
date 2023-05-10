@@ -38,7 +38,7 @@ public class RedisExample {
 //            list.add(stt.getMessage());
 //        }
 
-        // set value key statistic_list
+        // set value key  statistic_list
         template.opsForList().rightPushAll("statistic_list", jsonInString);
 
         System.out.println("Size of key statistic_list: "+template.opsForList().size("statistic_list"));
